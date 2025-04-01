@@ -15,9 +15,11 @@ import java.util.UUID;
 @RestController
 public class Controller {
     private final UserService userService;
+    private final PaymentService paymentService;
 
-    public Controller(UserService userService) {
+    public Controller(UserService userService, PaymentService paymentService) {
         this.userService = userService;
+        this.paymentService = paymentService;
     }
 
     @Getter
@@ -40,7 +42,31 @@ public class Controller {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-//    TODO: Post("/api/v1/payment")
+
+    @Getter
+    @Setter
+    public static class PaymentRequest {
+        @NotNull(message = "amount is required")
+        @DecimalMin(value = "0.0", inclusive = false, message = "amount should be at least 0.01")
+        private BigDecimal amount;
+
+        @NotNull(message = "senderUserId is required")
+        private UUID senderUserId;
+
+        @NotNull(message = "receiverUserId is required")
+        private UUID receiverUserId;
+    }
+
+    @PostMapping("api/v1/payment")
+    public ResponseEntity<Payment> processPayment(@Valid @RequestBody PaymentRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(paymentService.processPayment(
+                                request.getSenderUserId(),
+                                request.getReceiverUserId(),
+                                request.amount
+                        )
+                );
+    }
 //    TODO: Get("api/v1/payment/{paymentId}")
 //    TODO: Get("api/v1/payment")
 }

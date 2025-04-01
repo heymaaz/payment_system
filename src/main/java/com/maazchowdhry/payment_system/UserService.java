@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,5 +25,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> findById(UUID userId) {
         return userRepository.findById(userId);
+    }
+
+    @Transactional
+    public void addToUserBalance(User user, BigDecimal amountToAdd) {
+        BigDecimal newBalance = user.getBalance().add(amountToAdd);
+        user.setBalance(newBalance);
+        userRepository.save(user);
     }
 }

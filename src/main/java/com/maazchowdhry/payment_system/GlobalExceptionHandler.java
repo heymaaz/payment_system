@@ -15,7 +15,11 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+            NotEnoughBalanceException.class,
+            UserDoesntExistException.class
+    })
     @ResponseBody
     public Map<String, Object> handleExceptions(Exception ex) {
         Map<String, Object> response = new LinkedHashMap<>();
