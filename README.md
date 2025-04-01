@@ -59,6 +59,7 @@ API errors are handled centrally and return a standardized JSON response body, w
 Common error scenarios include invalid input data, non-existent users, and insufficient funds during payment processing.
 
 ## Design Choices & Technology
+- ![Spring Initializer.jpeg](Spring%20Initializer.jpeg "Spring Initializer.jpeg")
 - Framework: Java 21 with Spring Boot 3.4.4
 - Key Dependencies:
   - spring-boot-starter-web: For building the REST API.
