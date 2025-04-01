@@ -1,5 +1,6 @@
-package com.maazchowdhry.payment_system;
+package com.maazchowdhry.payment_system.dto.response;
 
+import com.maazchowdhry.payment_system.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

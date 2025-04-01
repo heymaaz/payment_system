@@ -1,6 +1,6 @@
 package com.maazchowdhry.payment_system.controller;
 
-import com.maazchowdhry.payment_system.PaymentDTO;
+import com.maazchowdhry.payment_system.dto.response.PaymentDTO;
 import com.maazchowdhry.payment_system.PaymentService;
 import com.maazchowdhry.payment_system.dto.request.PaymentRequest;
 import jakarta.validation.Valid;
