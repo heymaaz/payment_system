@@ -25,13 +25,13 @@ public class UserController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<User> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.save(new User(request.getInitialBalance())));
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<User> getUserByUserId(@PathVariable UUID userId) {
         return userService.findById(userId)
                 .map(ResponseEntity::ok)

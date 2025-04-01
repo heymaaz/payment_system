@@ -6,9 +6,9 @@ info:
 servers:
   - url: "http://localhost:8080"
 paths:
-  /api/v1/payment:
+  /api/v1/payments:
     post:
-      summary: "POST api/v1/payment"
+      summary: "POST api/v1/payments"
       operationId: "processPayment"
       requestBody:
         content:
@@ -24,7 +24,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/PaymentDTO"
     get:
-      summary: "GET api/v1/payment"
+      summary: "GET api/v1/payments"
       operationId: "getPayments"
       parameters:
         - name: "senderId"
@@ -72,9 +72,9 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/PaymentDTO"
-  /api/v1/payment/{paymentId}:
+  /api/v1/payments/{paymentId}:
     get:
-      summary: "GET api/v1/payment/{paymentId}"
+      summary: "GET api/v1/payments/{paymentId}"
       operationId: "getPaymentByPaymentId"
       parameters:
         - name: "paymentId"

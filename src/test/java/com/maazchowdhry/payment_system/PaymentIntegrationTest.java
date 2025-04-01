@@ -47,7 +47,7 @@ class PaymentIntegrationTest {
         UserRegistrationRequest req = new UserRegistrationRequest();
         req.setInitialBalance(new BigDecimal(initialBalance));
         ResponseEntity<User> response = restTemplate.postForEntity(
-                baseUrl + "/user", req, User.class);
+                baseUrl + "/users", req, User.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getUserId());
@@ -60,7 +60,7 @@ class PaymentIntegrationTest {
         paymentRequest.setReceiverUserId(receiver.getUserId());
         paymentRequest.setAmount(amount);
 
-        ResponseEntity<PaymentDTO> response = restTemplate.postForEntity(baseUrl + "/payment", paymentRequest, PaymentDTO.class);
+        ResponseEntity<PaymentDTO> response = restTemplate.postForEntity(baseUrl + "/payments", paymentRequest, PaymentDTO.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getPaymentId());
@@ -74,7 +74,7 @@ class PaymentIntegrationTest {
         request.setInitialBalance(initialBalance);
 
         ResponseEntity<User> registrationResponse = restTemplate.postForEntity(
-                baseUrl + "/user", request, User.class);
+                baseUrl + "/users", request, User.class);
 
         assertEquals(HttpStatus.CREATED, registrationResponse.getStatusCode());
         User createdUser = registrationResponse.getBody();
@@ -86,7 +86,7 @@ class PaymentIntegrationTest {
 
         UUID createdUserId = createdUser.getUserId();
         ResponseEntity<User> retrievalResponse = restTemplate.getForEntity(
-                baseUrl + "/user/" + createdUserId, User.class);
+                baseUrl + "/users/" + createdUserId, User.class);
 
         assertEquals(HttpStatus.OK, retrievalResponse.getStatusCode());
         User retrievedUser = retrievalResponse.getBody();
@@ -100,7 +100,7 @@ class PaymentIntegrationTest {
         UUID nonExistentId = UUID.randomUUID();
 
         ResponseEntity<User> response = restTemplate.getForEntity(
-                baseUrl + "/user/" + nonExistentId, User.class);
+                baseUrl + "/users/" + nonExistentId, User.class);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
@@ -117,7 +117,7 @@ class PaymentIntegrationTest {
         paymentRequest.setReceiverUserId(receiver.getUserId());
         paymentRequest.setAmount(amount);
 
-        ResponseEntity<PaymentDTO> paymentResponse = restTemplate.postForEntity(baseUrl + "/payment", paymentRequest, PaymentDTO.class);
+        ResponseEntity<PaymentDTO> paymentResponse = restTemplate.postForEntity(baseUrl + "/payments", paymentRequest, PaymentDTO.class);
 
         assertEquals(HttpStatus.CREATED, paymentResponse.getStatusCode());
         PaymentDTO paymentDTO = paymentResponse.getBody();
@@ -153,7 +153,7 @@ class PaymentIntegrationTest {
         paymentRequest.setAmount(amount);
 
         ResponseEntity<String> paymentResponse = restTemplate.postForEntity(
-                baseUrl + "/payment", paymentRequest, String.class);
+                baseUrl + "/payments", paymentRequest, String.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, paymentResponse.getStatusCode()); // ADJUST if your exception handling differs
 
@@ -176,7 +176,7 @@ class PaymentIntegrationTest {
         paymentRequest.setReceiverUserId(receiver.getUserId());
         paymentRequest.setAmount(amount);
 
-        ResponseEntity<String> paymentResponse = restTemplate.postForEntity(baseUrl + "/payment", paymentRequest, String.class);
+        ResponseEntity<String> paymentResponse = restTemplate.postForEntity(baseUrl + "/payments", paymentRequest, String.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, paymentResponse.getStatusCode());
 
@@ -196,7 +196,7 @@ class PaymentIntegrationTest {
         paymentRequest.setReceiverUserId(fakeReceiverId);
         paymentRequest.setAmount(amount);
 
-        ResponseEntity<String> paymentResponse = restTemplate.postForEntity(baseUrl + "/payment", paymentRequest, String.class);
+        ResponseEntity<String> paymentResponse = restTemplate.postForEntity(baseUrl + "/payments", paymentRequest, String.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, paymentResponse.getStatusCode());
 
@@ -214,7 +214,7 @@ class PaymentIntegrationTest {
         PaymentDTO createdPayment = processPaymentViaApi(sender, receiver, amount);
 
         ResponseEntity<PaymentDTO> retrievalResponse = restTemplate.getForEntity(
-                baseUrl + "/payment/" + createdPayment.getPaymentId(), PaymentDTO.class);
+                baseUrl + "/payments/" + createdPayment.getPaymentId(), PaymentDTO.class);
 
         assertEquals(HttpStatus.OK, retrievalResponse.getStatusCode());
         PaymentDTO retrievedPayment = retrievalResponse.getBody();
@@ -228,7 +228,7 @@ class PaymentIntegrationTest {
         UUID nonExistentId = UUID.randomUUID();
 
         ResponseEntity<PaymentDTO> response = restTemplate.getForEntity(
-                baseUrl + "/payment/" + nonExistentId, PaymentDTO.class);
+                baseUrl + "/payments/" + nonExistentId, PaymentDTO.class);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }

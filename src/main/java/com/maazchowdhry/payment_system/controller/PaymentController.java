@@ -21,7 +21,7 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping("/payment")
+    @PostMapping("/payments")
     public ResponseEntity<PaymentDTO> processPayment(@Valid @RequestBody PaymentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(paymentService.processPayment(
@@ -32,14 +32,14 @@ public class PaymentController {
                 );
     }
 
-    @GetMapping("/payment/{paymentId}")
+    @GetMapping("/payments/{paymentId}")
     public ResponseEntity<PaymentDTO> getPaymentByPaymentId(@PathVariable UUID paymentId) {
         return paymentService.findById(paymentId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/payment")
+    @GetMapping("/payments")
     public ResponseEntity<Page<PaymentDTO>> getPayments(
             @RequestParam(required = false) UUID senderId,
             @RequestParam(required = false) UUID receiverId,

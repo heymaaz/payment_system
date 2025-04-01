@@ -6,9 +6,9 @@ info:
 servers:
   - url: "http://localhost:8080"
 paths:
-  /api/v1/user:
+  /api/v1/users:
     post:
-      summary: "POST api/v1/user"
+      summary: "POST api/v1/users"
       operationId: "registerUser"
       requestBody:
         content:
@@ -23,9 +23,9 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/User"
-  /api/v1/user/{userId}:
+  /api/v1/users/{userId}:
     get:
-      summary: "GET api/v1/user/{userId}"
+      summary: "GET api/v1/users/{userId}"
       operationId: "getUserByUserId"
       parameters:
         - name: "userId"
