@@ -1,6 +1,8 @@
 package com.maazchowdhry.payment_system;
 
 import com.maazchowdhry.payment_system.dto.response.PaymentDTO;
+import com.maazchowdhry.payment_system.exception.NotEnoughBalanceException;
+import com.maazchowdhry.payment_system.exception.UserDoesntExistException;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,7 +1,7 @@
-package com.maazchowdhry.payment_system;
+package com.maazchowdhry.payment_system.exception;
 
 public class NotEnoughBalanceException extends RuntimeException{
-    NotEnoughBalanceException() {
+    public NotEnoughBalanceException() {
         super("You don't have enough funds to complete this transaction");
     }
 }
