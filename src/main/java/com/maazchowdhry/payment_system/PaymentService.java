@@ -2,10 +2,16 @@ package com.maazchowdhry.payment_system;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,5 +60,18 @@ public class PaymentService {
         entityManager.flush(); // Force flush to get timestamp of the payment
 
         return PaymentDTO.fromEntity(savedPayment);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Page<PaymentDTO>> findFilteredPayments(UUID senderId, UUID receiverId, int page, int pageSize, LocalDateTime startDate, LocalDateTime endDate) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "timestamp");
+
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+
+        Specification<Payment> spec = PaymentSpecification.withFilters(senderId,receiverId,startDate,endDate);
+
+        Page<Payment> paymentPage = paymentRepository.findAll(spec, pageable);
+
+        return Optional.of(paymentPage.map(PaymentDTO::fromEntity));
     }
 }
