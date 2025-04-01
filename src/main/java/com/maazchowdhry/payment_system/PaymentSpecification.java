@@ -33,4 +33,28 @@ public class PaymentSpecification {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<Payment> withFilters(UUID userId, LocalDateTime startDate, LocalDateTime endDate) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> finalPredicates = new ArrayList<>();
+
+            if (userId != null) {
+                Predicate senderIsUser = criteriaBuilder.equal(root.get("sender").get("userId"), userId);
+                Predicate receiverIsUser = criteriaBuilder.equal(root.get("receiver").get("userId"), userId);
+
+                Predicate userIsSenderOrReceiver = criteriaBuilder.or(senderIsUser, receiverIsUser);
+
+                finalPredicates.add(userIsSenderOrReceiver);
+            }
+
+            if (startDate != null) {
+                finalPredicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("timestamp"), startDate));
+            }
+
+            if (endDate != null) {
+                finalPredicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("timestamp"), endDate));
+            }
+            return criteriaBuilder.and(finalPredicates.toArray(new Predicate[0]));
+        };
+    }
 }

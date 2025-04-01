@@ -77,4 +77,17 @@ public class PaymentService {
 
         return paymentPage.map(PaymentDTO::fromEntity);
     }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentDTO> findFilteredPaymentsForUserId(UUID userId, int page, int pageSize, LocalDateTime startDate, LocalDateTime endDate) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "timestamp");
+
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+
+        Specification<Payment> spec = PaymentSpecification.withFilters(userId,startDate,endDate);
+
+        Page<Payment> paymentPage = paymentRepository.findAll(spec, pageable);
+
+        return paymentPage.map(PaymentDTO::fromEntity);
+    }
 }
