@@ -1,12 +1,12 @@
 package com.maazchowdhry.payment_system;
 
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import jakarta.persistence.criteria.Predicate;
 
 public class PaymentSpecification {
 
@@ -15,11 +15,11 @@ public class PaymentSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             if (senderId != null) {
-                predicates.add(criteriaBuilder.equal(root.get("senderId"), senderId));
+                predicates.add(criteriaBuilder.equal(root.get("sender").get("userId"), senderId));
             }
 
             if (receiverId != null) {
-                predicates.add(criteriaBuilder.equal(root.get("receiverId"), receiverId));
+                predicates.add(criteriaBuilder.equal(root.get("receiver").get("userId"), receiverId));
             }
 
             if (startDate != null) {
