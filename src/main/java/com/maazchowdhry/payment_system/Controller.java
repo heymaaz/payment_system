@@ -5,18 +5,19 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 public class Controller {
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public Controller(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public Controller(UserService userService) {
+        this.userService = userService;
     }
 
     @Getter
@@ -28,14 +29,16 @@ public class Controller {
     }
 
     @PostMapping("api/v1/user")
-    public User registerUser(@Valid @RequestBody UserRegistrationRequest request) {
-        return userRepository.save(new User(request.initialBalance));
+    public ResponseEntity<User> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.save(new User(request.initialBalance)));
     }
 
     @GetMapping("/api/v1/user/{userId}")
-    public Optional<User> getUserByUserID(@PathVariable UUID userId) {
-//    TODO: return 404 not found if not found.
-        return userRepository.findById(userId);
+    public ResponseEntity<User> getUserByUserID(@PathVariable UUID userId) {
+        return userService.findById(userId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 //    TODO: Post("/api/v1/payment")
 //    TODO: Get("api/v1/payment/{paymentId}")
