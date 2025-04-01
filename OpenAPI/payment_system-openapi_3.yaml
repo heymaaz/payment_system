@@ -1,0 +1,65 @@
+openapi: "3.1.0"
+info:
+  title: "payment_system API"
+  description: "payment_system API"
+  version: "1.0.0"
+servers:
+  - url: "https://payment_system"
+paths:
+  /api/v1/user:
+    post:
+      summary: "POST api/v1/user"
+      operationId: "registerUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegistrationRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/User"
+  /api/v1/user/{userId}:
+    get:
+      summary: "GET api/v1/user/{userId}"
+      operationId: "getUserByUserId"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/User"
+components:
+  schemas:
+    BigDecimal:
+      type: "number"
+    UserRegistrationRequest:
+      type: "object"
+      properties:
+        initialBalance:
+          $ref: "#/components/schemas/BigDecimal"
+    User:
+      type: "object"
+      properties:
+        userId:
+          type: "string"
+          format: "uuid"
+        initialBalance:
+          $ref: "#/components/schemas/BigDecimal"
+        balance:
+          $ref: "#/components/schemas/BigDecimal"
+        createdAt:
+          type: "string"
+          format: "date-time"
