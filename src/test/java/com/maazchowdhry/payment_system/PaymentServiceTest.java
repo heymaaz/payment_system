@@ -7,10 +7,7 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -179,9 +176,9 @@ class PaymentServiceTest {
     void processPayment_senderDoesNotExist_shouldThrowUserDoesntExistException() {
         when(userService.findById(senderId)).thenReturn(Optional.empty());
 
-        UserDoesntExistException exception = assertThrows(UserDoesntExistException.class, () -> {
-            paymentService.processPayment(senderId, receiverId, paymentAmount);
-        });
+        UserDoesntExistException exception = assertThrows(UserDoesntExistException.class, () ->
+            paymentService.processPayment(senderId, receiverId, paymentAmount)
+        );
         assertTrue(exception.getMessage().contains("Sender user"));
         assertTrue(exception.getMessage().contains(senderId.toString()));
 
@@ -196,9 +193,9 @@ class PaymentServiceTest {
         when(userService.findById(senderId)).thenReturn(Optional.of(sender));
         when(userService.findById(receiverId)).thenReturn(Optional.empty());
 
-        UserDoesntExistException exception = assertThrows(UserDoesntExistException.class, () -> {
-            paymentService.processPayment(senderId, receiverId, paymentAmount);
-        });
+        UserDoesntExistException exception = assertThrows(UserDoesntExistException.class, () ->
+            paymentService.processPayment(senderId, receiverId, paymentAmount)
+        );
         assertTrue(exception.getMessage().contains("Receiver user"));
         assertTrue(exception.getMessage().contains(receiverId.toString()));
 
@@ -215,9 +212,9 @@ class PaymentServiceTest {
         when(userService.findById(senderId)).thenReturn(Optional.of(sender));
         when(userService.findById(receiverId)).thenReturn(Optional.of(receiver));
 
-        assertThrows(NotEnoughBalanceException.class, () -> {
-            paymentService.processPayment(senderId, receiverId, highAmount);
-        });
+        assertThrows(NotEnoughBalanceException.class, () ->
+            paymentService.processPayment(senderId, receiverId, highAmount)
+        );
 
         verify(userService, times(1)).findById(senderId);
         verify(userService, times(1)).findById(receiverId);
@@ -240,7 +237,7 @@ class PaymentServiceTest {
         List<Payment> paymentList = List.of(payment1, payment2);
         Page<Payment> mockResultPage = new PageImpl<>(paymentList, expectedPageable, paymentList.size());
 
-        when(paymentRepository.findAll(any(Specification.class), eq(expectedPageable)))
+        when(paymentRepository.findAll(ArgumentMatchers.<Specification<Payment>>any(), eq(expectedPageable)))
                 .thenReturn(mockResultPage);
 
         Page<PaymentDTO> resultPage = paymentService.findFilteredPayments(senderId, receiverId, page, pageSize, startDate, endDate);
