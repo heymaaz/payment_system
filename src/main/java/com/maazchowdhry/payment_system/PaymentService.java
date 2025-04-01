@@ -63,7 +63,7 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Page<PaymentDTO>> findFilteredPayments(UUID senderId, UUID receiverId, int page, int pageSize, LocalDateTime startDate, LocalDateTime endDate) {
+    public Page<PaymentDTO> findFilteredPayments(UUID senderId, UUID receiverId, int page, int pageSize, LocalDateTime startDate, LocalDateTime endDate) {
         Sort sort = Sort.by(Sort.Direction.DESC, "timestamp");
 
         Pageable pageable = PageRequest.of(page, pageSize, sort);
@@ -72,6 +72,6 @@ public class PaymentService {
 
         Page<Payment> paymentPage = paymentRepository.findAll(spec, pageable);
 
-        return Optional.of(paymentPage.map(PaymentDTO::fromEntity));
+        return paymentPage.map(PaymentDTO::fromEntity);
     }
 }
