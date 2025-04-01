@@ -5,11 +5,11 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class Controller {
@@ -32,8 +32,11 @@ public class Controller {
         return userRepository.save(new User(request.initialBalance));
     }
 
-//    TODO: Better Error Handling
-//    TODO: Get("/api/v1/user/{userId}")
+    @GetMapping("/api/v1/user/{userId}")
+    public Optional<User> getUserByUserID(@PathVariable UUID userId) {
+//    TODO: return 404 not found if not found.
+        return userRepository.findById(userId);
+    }
 //    TODO: Post("/api/v1/payment")
 //    TODO: Get("api/v1/payment/{paymentId}")
 //    TODO: Get("api/v1/payment")
