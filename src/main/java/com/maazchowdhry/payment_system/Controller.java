@@ -37,7 +37,7 @@ public class Controller {
     }
 
     @GetMapping("/api/v1/user/{userId}")
-    public ResponseEntity<User> getUserByUserID(@PathVariable UUID userId) {
+    public ResponseEntity<User> getUserByUserId(@PathVariable UUID userId) {
         return userService.findById(userId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -67,6 +67,13 @@ public class Controller {
                         )
                 );
     }
-//    TODO: Get("api/v1/payment/{paymentId}")
+
+    @GetMapping("api/v1/payment/{paymentId}")
+    public ResponseEntity<Payment> getPaymentByPaymentId(@PathVariable UUID paymentId) {
+//    TODO: Don't leak user data
+        return paymentService.findById(paymentId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 //    TODO: Get("api/v1/payment")
 }
