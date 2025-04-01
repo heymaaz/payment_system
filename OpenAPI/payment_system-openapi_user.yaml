@@ -4,7 +4,7 @@ info:
   description: "payment_system API"
   version: "1.0.0"
 servers:
-  - url: "https://payment_system"
+  - url: "http://localhost:8080"
 paths:
   /api/v1/user:
     post:
