@@ -1,5 +1,6 @@
 package com.maazchowdhry.payment_system;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +13,14 @@ import java.util.UUID;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final UserService userService;
+    private final EntityManager entityManager;
+
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository, UserService userService) {
+    public PaymentService(PaymentRepository paymentRepository, UserService userService, EntityManager entityManager) {
         this.paymentRepository = paymentRepository;
         this.userService = userService;
+        this.entityManager = entityManager;
     }
 
     @Transactional
@@ -45,7 +49,9 @@ public class PaymentService {
 
         Payment payment = new Payment(sender, receiver, amount);
 
-        Payment savedPayment = paymentRepository.save(payment);
+        Payment savedPayment = save(payment);
+
+        entityManager.flush(); // Force flush to get timestamp of the payment
 
         return PaymentDTO.fromEntity(savedPayment);
     }
