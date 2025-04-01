@@ -17,7 +17,7 @@ The core requirements met include:
 ## Prerequisites
 
 * Java JDK 21 or later
-* Apache Maven 3.3.2+ (The Maven Wrapper `./mvnw` is included)
+* Apache Maven 3.9.9+ (The Maven Wrapper `./mvnw` is included)
 
 ## Build Instructions
 
