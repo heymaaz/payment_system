@@ -25,12 +25,12 @@ public class PaymentService {
     }
     
     @Transactional(readOnly = true)
-    public Optional<Payment> findById(UUID paymentId) {
-        return paymentRepository.findById(paymentId);
+    public Optional<PaymentDTO> findById(UUID paymentId) {
+        return paymentRepository.findById(paymentId).map(PaymentDTO::fromEntity);
     }
 
     @Transactional
-    public Payment processPayment(UUID senderId, UUID receiverId, BigDecimal amount) {
+    public PaymentDTO processPayment(UUID senderId, UUID receiverId, BigDecimal amount) {
         //check sender and receiver exist
         User sender = userService.findById(senderId).orElseThrow(() -> new UserDoesntExistException("Sender user with id " + senderId + " does not exist"));
         User receiver = userService.findById(receiverId).orElseThrow(() -> new UserDoesntExistException("Receiver user with id " + receiverId + " does not exist"));
@@ -45,6 +45,8 @@ public class PaymentService {
 
         Payment payment = new Payment(sender, receiver, amount);
 
-        return paymentRepository.save(payment);
+        Payment savedPayment = paymentRepository.save(payment);
+
+        return PaymentDTO.fromEntity(savedPayment);
     }
 }

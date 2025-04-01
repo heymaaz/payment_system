@@ -58,7 +58,7 @@ public class Controller {
     }
 
     @PostMapping("api/v1/payment")
-    public ResponseEntity<Payment> processPayment(@Valid @RequestBody PaymentRequest request) {
+    public ResponseEntity<PaymentDTO> processPayment(@Valid @RequestBody PaymentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(paymentService.processPayment(
                                 request.getSenderUserId(),
@@ -69,8 +69,7 @@ public class Controller {
     }
 
     @GetMapping("api/v1/payment/{paymentId}")
-    public ResponseEntity<Payment> getPaymentByPaymentId(@PathVariable UUID paymentId) {
-//    TODO: Don't leak user data
+    public ResponseEntity<PaymentDTO> getPaymentByPaymentId(@PathVariable UUID paymentId) {
         return paymentService.findById(paymentId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
